@@ -74,6 +74,12 @@ p {
   align-items: center;
   gap: 10px;
 }
+.brand-logo {
+  flex: none;
+  display: block;
+  width: 38px;
+  height: 38px;
+}
 .brand-name {
   margin: 0;
   font-size: 1.05rem;

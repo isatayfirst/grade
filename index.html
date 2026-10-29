@@ -1,86 +1,137 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="kk">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Grade Calculator</title>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>Grade Calculator — қорытынды бағаны есептеу</title>
+  <meta name="description" content="Аудиториялық, модуль және емтихан баллдары бойынша қорытынды бағаны есептеңіз немесе қалаған бағаға жету үшін қанша балл керек екенін біліңіз." />
+  <meta name="theme-color" content="#0e0e10" />
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Grade Calculator" />
+  <meta property="og:description" content="Қорытынды бағаны және емтиханнан қанша балл керек екенін есептеу." />
+  <meta property="og:url" content="https://isatayfirst.github.io/grade/" />
+  <meta property="og:image" content="https://isatayfirst.github.io/grade/og.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
   <link rel="icon" type="image/png" href="logo.png" />
   <link rel="stylesheet" href="style.css" />
+  <script src="script.js" defer></script>
 </head>
 <body>
-    <h1><span>Grade Calculator</span></h1>
-  <div id="container">
-    <div class="card1">
-      <input placeholder="Aidutornyi" class="input" type="number" id="audi" /><br />
-      <input placeholder="Modul 1" class="input" type="number" id="rk1" /><br />
-      <input placeholder="Modul 2" class="input" type="number" id="rk2" /><br />
-      <input placeholder="Emtihan" class="input" type="number" id="emtihan" /><br />
-      <input placeholder="Qalagan baga" class="input" type="number" id="qalau" style="margin-bottom: 20px;" /><br />
-      <button onclick="calculate()" class="button">Calculate</button>
+  <header class="topbar">
+    <div class="brand">
+      <span class="icon-tile" aria-hidden="true">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="3" width="16" height="18" rx="2" /><rect x="8" y="7" width="8" height="3" rx="1" /><path d="M8 14h.01M12 14h.01M16 14h.01M8 17h.01M12 17h.01M16 17h.01" /></svg>
+      </span>
+      <h1 class="brand-name" lang="en">Grade Calculator</h1>
     </div>
-    <div class="output">
-        <textarea id="result" readonly></textarea>
+    <div class="topbar-actions">
+      <details class="formula">
+        <summary class="chip" aria-label="Формула">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9" /><path d="M12 8h.01M11 12h1v4h1" /></svg>
+          <span class="chip-text">Формула</span>
+        </summary>
+        <div class="formula-popover">
+          <p class="formula-line">Аудиториялық × 0.4<br />+ (Модуль 1 + Модуль 2) / 2 × 0.2<br />+ Емтихан × 0.4</p>
+          <p class="muted">Ең жоғары баға — 100.</p>
+        </div>
+      </details>
+      <button type="reset" form="calc" class="chip" aria-label="Тазалау">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 11a8.1 8.1 0 0 0-15.5-2m-.5-4v4h4" /><path d="M4 13a8.1 8.1 0 0 0 15.5 2m.5 4v-4h-4" /></svg>
+        <span class="chip-text">Тазалау</span>
+      </button>
+    </div>
+  </header>
+
+  <main class="layout">
+    <section class="panel form-panel" aria-labelledby="form-title">
+      <h2 class="panel-title" id="form-title">
+        <span class="icon-tile icon-tile-sm" aria-hidden="true">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6h8M16 6h4M4 12h2M10 12h10M4 18h11M19 18h1" /><circle cx="14" cy="6" r="2" /><circle cx="8" cy="12" r="2" /><circle cx="17" cy="18" r="2" /></svg>
+        </span>
+        Баллдар
+      </h2>
+      <p class="panel-hint">Бос өрісті қалдырсаң, қалаған бағаға жету үшін қанша балл керек екенін көрсетеміз.</p>
+      <form id="calc" novalidate>
+        <div class="field">
+          <label for="audi">Аудиториялық</label>
+          <input class="input" type="text" id="audi" name="audi" inputmode="decimal" autocomplete="off" placeholder="0–100" required />
+        </div>
+        <div class="grid">
+          <div class="field">
+            <label for="rk1">Модуль 1</label>
+            <input class="input" type="text" id="rk1" name="rk1" inputmode="decimal" autocomplete="off" placeholder="0–100" />
+          </div>
+          <div class="field">
+            <label for="rk2">Модуль 2</label>
+            <input class="input" type="text" id="rk2" name="rk2" inputmode="decimal" autocomplete="off" placeholder="0–100" />
+          </div>
+        </div>
+        <div class="field">
+          <label for="emtihan">Емтихан</label>
+          <input class="input" type="text" id="emtihan" name="emtihan" inputmode="decimal" autocomplete="off" placeholder="0–100" />
+        </div>
+        <div class="field">
+          <label for="qalau">Қалаған баға</label>
+          <input class="input" type="text" id="qalau" name="qalau" inputmode="decimal" autocomplete="off" placeholder="мысалы, 70" />
+        </div>
+        <div class="form-actions">
+          <button type="submit" class="button button-primary">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="3" width="16" height="18" rx="2" /><path d="M8 7h8M8 12h.01M12 12h.01M16 12h.01M8 16h.01M12 16h.01M16 16h.01" /></svg>
+            Есептеу
+          </button>
+        </div>
+      </form>
+
+      <div class="weights">
+        <p class="weights-title">Қорытынды баға қалай құралады</p>
+        <div class="weights-bar" aria-hidden="true">
+          <span class="w-audi"></span><span class="w-modules"></span><span class="w-exam"></span>
+        </div>
+        <ul class="weights-list">
+          <li><i class="dot w-audi" aria-hidden="true"></i>Аудиториялық <b>40%</b></li>
+          <li><i class="dot w-modules" aria-hidden="true"></i>Модульдер (орташасы) <b>20%</b></li>
+          <li><i class="dot w-exam" aria-hidden="true"></i>Емтихан <b>40%</b></li>
+        </ul>
       </div>
-  </div>
+    </section>
 
-  <footer>
-    <span>Біздің әлеуметтік желелір</span>
-    <div class="share">
-      <a href="https://www.instagram.com/infogo_club" target="_blank">
-        <img src="instagram.png" alt="Instagram" />
-      </a>
-      <a href="https://www.youtube.com/@infogoclub" target="_blank">
-        <img src="youtube.png" alt="YouTube" />
-      </a>
-      <a href="https://forms.gle/mMktMV2SVtzjs5gd6" target="_blank">
-        <img src="checklist.png" alt="Join the team" />
-      </a>
-      <a href="https://www.tiktok.com/@infogo_club" target="_blank">
-        <img src="tik-tok.png" alt="TikTok" />
-      </a>
-    </div>
-  </footer>
-  
+    <section class="panel stat stat-current" aria-label="Жинаған балл">
+      <p class="stat-label">Жинаған балл</p>
+      <p class="stat-value" id="current-value">—</p>
+      <div class="bar" aria-hidden="true"><i id="current-bar"></i></div>
+      <p class="stat-note" id="current-note">Баллдарды енгізіңіз</p>
+    </section>
 
-  <script>
-    function calculate() {
-  let audi = +document.getElementById("audi").value || 0;
-  let rk1 = +document.getElementById("rk1").value || 0;
-  let rk2 = +document.getElementById("rk2").value || 0;
-  let emtihan = +document.getElementById("emtihan").value || 0;
-  let qalau = +document.getElementById("qalau").value || 0;
-  let result = document.getElementById("result");
-  result.value = "";
+    <section class="panel stat stat-target" aria-label="Қалаған баға">
+      <p class="stat-label">Қалаған баға</p>
+      <p class="stat-value" id="target-value">—</p>
+      <p class="stat-note" id="target-note">Енгізілмеген</p>
+    </section>
 
-  function getScore(a, r1, r2, e) {
-    return a * 0.4 + ((r1 + r2) / 2) * 0.2 + e * 0.4;
-  }
+    <section class="panel stat stat-need" aria-labelledby="result-title">
+      <h2 id="result-title" class="sr-only">Нәтиже</h2>
+      <div id="result" class="result" role="status" aria-live="polite">
+        <p class="muted">Баллдарды енгізіп, «Есептеу» батырмасын басыңыз.</p>
+      </div>
+    </section>
 
-  if (audi && rk1 && rk2 && emtihan) {
-    result.value = "Нәтиже: " + getScore(audi, rk1, rk2, emtihan).toFixed(2);
-    return;
-  }
+    <section class="panel chart-panel" aria-labelledby="chart-title">
+      <h2 class="panel-title" id="chart-title">
+        <span class="icon-tile icon-tile-sm" aria-hidden="true">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="12" width="4" height="8" rx="1" /><rect x="10" y="8" width="4" height="12" rx="1" /><rect x="16" y="4" width="4" height="16" rx="1" /></svg>
+        </span>
+        <span id="chart-title-text">Баллдың құрамы</span>
+      </h2>
+      <div id="chart" class="chart">
+        <p class="muted">Есептеуден кейін мұнда график шығады.</p>
+      </div>
+    </section>
+  </main>
 
-  let output = [];
-  let m1_range = rk1 ? [rk1] : Array.from({ length: 11 }, (_, i) => 50 + i * 5);
-  let m2_range = rk2 ? [rk2] : Array.from({ length: 11 }, (_, i) => 50 + i * 5);
-  let exam_range = emtihan ? [emtihan] : Array.from({ length: 26 }, (_, i) => 50 + i * 2);
-
-  for (let m1 of m1_range) {
-    for (let m2 of m2_range) {
-      for (let exam of exam_range) {
-        let score = getScore(audi, m1, m2, exam);
-        if (score >= qalau) {
-          output.push(`Модуль1: ${m1}, Модуль2: ${m2}, Емтихан: ${exam} → ${score.toFixed(2)}`);
-        }
-      }
-    }
-  }
-
-  result.value = output.length > 0 ? output.join('\n') : "Мұндай нәтижеге жету мүмкін емес!";
-}
-
-  </script>
+  <div id="tooltip" class="tooltip" role="tooltip" hidden></div>
 </body>
 </html>
